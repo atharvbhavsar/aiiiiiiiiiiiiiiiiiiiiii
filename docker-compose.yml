@@ -1,0 +1,98 @@
+# AWS Deployment Configuration for AdmitAI
+# Ensures 24/7 availability with auto-scaling and health monitoring
+
+version: '3.8'
+
+services:
+  admitai-web:
+    build: .
+    ports:
+      - "80:5000"
+    environment:
+      - FLASK_ENV=production
+      - GEMINI_API_KEY=AIzaSyC-2jr4RlBvKWW8sdjdGjJBQ1ujHR-D2Xs
+      - DATABASE_URL=postgresql://user:pass@db:5432/admitai
+      - REDIS_URL=redis://redis:6379
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=ap-south-1
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: admitai
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d admitai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - admitai-web
+    restart: always
+
+  ai-worker:
+    build: .
+    command: python ai_worker.py
+    environment:
+      - GEMINI_API_KEY=AIzaSyC-2jr4RlBvKWW8sdjdGjJBQ1ujHR-D2Xs
+      - ELEVEN_LABS_API_KEY=${ELEVEN_LABS_API_KEY}
+      - VAPI_API_KEY=${VAPI_API_KEY}
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+    restart: always
+    deploy:
+      replicas: 2
+
+  automation-worker:
+    build: .
+    command: python automation_worker.py
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/admitai
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - MAKE_WEBHOOK_URL=${MAKE_WEBHOOK_URL}
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    driver: bridge

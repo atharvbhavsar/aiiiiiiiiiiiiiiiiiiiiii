@@ -1,0 +1,453 @@
+{
+  "name": "AdmitAI Automation Workflows",
+  "version": "1.0.0",
+  "description": "Comprehensive automation workflows for AdmitAI college admission platform",
+  "workflows": {
+    "studentQueryLogging": {
+      "name": "Student Query Logging & Analytics",
+      "trigger": "chatbot_interaction",
+      "description": "Logs all student queries for analytics and improvement",
+      "steps": [
+        {
+          "id": "webhook_receive",
+          "type": "webhook",
+          "method": "POST",
+          "endpoint": "/webhook/student-query",
+          "data": {
+            "student_id": "{{ $json.student_id }}",
+            "query": "{{ $json.query }}",
+            "response": "{{ $json.response }}",
+            "timestamp": "{{ $now }}"
+          }
+        },
+        {
+          "id": "log_to_database",
+          "type": "database",
+          "action": "insert",
+          "table": "student_queries",
+          "data": "{{ $json }}"
+        },
+        {
+          "id": "analyze_sentiment",
+          "type": "ai_service",
+          "service": "google_nlp",
+          "action": "analyze_sentiment",
+          "text": "{{ $json.query }}"
+        },
+        {
+          "id": "send_analytics",
+          "type": "email",
+          "condition": "sentiment_score < 0.5",
+          "to": "admin@admitai.com",
+          "subject": "Low Satisfaction Query Alert",
+          "body": "Student query with low satisfaction detected: {{ $json.query }}"
+        }
+      ]
+    },
+    "documentVerificationWorkflow": {
+      "name": "Automated Document Verification",
+      "trigger": "document_upload",
+      "description": "Automatically processes and verifies uploaded documents",
+      "steps": [
+        {
+          "id": "document_received",
+          "type": "webhook",
+          "endpoint": "/webhook/document-upload",
+          "data": {
+            "student_id": "{{ $json.student_id }}",
+            "document_type": "{{ $json.document_type }}",
+            "file_url": "{{ $json.file_url }}"
+          }
+        },
+        {
+          "id": "ocr_processing",
+          "type": "ai_service",
+          "service": "google_vision",
+          "action": "extract_text",
+          "image_url": "{{ $json.file_url }}"
+        },
+        {
+          "id": "validate_document",
+          "type": "function",
+          "code": "validateDocumentContent({{ $json.extracted_text }}, {{ $json.document_type }})"
+        },
+        {
+          "id": "update_student_status",
+          "type": "database",
+          "action": "update",
+          "table": "students",
+          "where": "id = {{ $json.student_id }}",
+          "data": {
+            "document_status": "{{ $json.validation_result }}",
+            "verified_at": "{{ $now }}"
+          }
+        },
+        {
+          "id": "send_notification",
+          "type": "notification",
+          "service": "firebase",
+          "to": "{{ $json.student_id }}",
+          "title": "Document Status Update",
+          "body": "Your {{ $json.document_type }} has been {{ $json.validation_result }}"
+        }
+      ]
+    },
+    "admissionDeadlineReminders": {
+      "name": "Admission Deadline Reminders",
+      "trigger": "schedule",
+      "schedule": "0 9 * * *",
+      "description": "Daily check for upcoming deadlines and send reminders",
+      "steps": [
+        {
+          "id": "check_deadlines",
+          "type": "database",
+          "action": "select",
+          "query": "SELECT * FROM important_dates WHERE deadline_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY)"
+        },
+        {
+          "id": "get_interested_students",
+          "type": "database",
+          "action": "select",
+          "query": "SELECT * FROM students WHERE preferred_exams LIKE '%{{ $json.exam_name }}%'"
+        },
+        {
+          "id": "send_bulk_notifications",
+          "type": "loop",
+          "items": "{{ $json.students }}",
+          "steps": [
+            {
+              "id": "send_email",
+              "type": "email",
+              "to": "{{ $item.email }}",
+              "subject": "⏰ Important Deadline Reminder - {{ $json.deadline.exam_name }}",
+              "template": "deadline_reminder",
+              "data": {
+                "student_name": "{{ $item.name }}",
+                "exam_name": "{{ $json.deadline.exam_name }}",
+                "deadline_date": "{{ $json.deadline.deadline_date }}",
+                "action_required": "{{ $json.deadline.action_required }}"
+              }
+            },
+            {
+              "id": "send_push_notification",
+              "type": "notification",
+              "service": "firebase",
+              "to": "{{ $item.device_token }}",
+              "title": "⏰ Deadline Alert",
+              "body": "{{ $json.deadline.exam_name }} deadline in {{ $json.days_remaining }} days!"
+            }
+          ]
+        }
+      ]
+    },
+    "realTimeCutoffUpdates": {
+      "name": "Real-time Cutoff Updates",
+      "trigger": "external_api",
+      "description": "Monitors external sources for cutoff updates and notifies users",
+      "steps": [
+        {
+          "id": "fetch_cutoff_data",
+          "type": "http_request",
+          "method": "GET",
+          "url": "https://api.mhtcet.org/cutoffs/latest",
+          "headers": {
+            "Authorization": "Bearer {{ $env.MHT_CET_API_KEY }}"
+          }
+        },
+        {
+          "id": "compare_with_existing",
+          "type": "database",
+          "action": "select",
+          "query": "SELECT * FROM cutoffs WHERE college_code = '{{ $json.college_code }}' AND course_code = '{{ $json.course_code }}' ORDER BY year DESC LIMIT 1"
+        },
+        {
+          "id": "detect_changes",
+          "type": "function",
+          "code": "detectCutoffChanges({{ $json.new_data }}, {{ $json.existing_data }})"
+        },
+        {
+          "id": "update_database",
+          "type": "database",
+          "action": "upsert",
+          "table": "cutoffs",
+          "data": "{{ $json.new_data }}"
+        },
+        {
+          "id": "notify_interested_students",
+          "type": "condition",
+          "if": "{{ $json.has_changes }}",
+          "then": [
+            {
+              "id": "find_tracking_students",
+              "type": "database",
+              "action": "select",
+              "query": "SELECT * FROM student_college_tracking WHERE college_code = '{{ $json.college_code }}'"
+            },
+            {
+              "id": "send_cutoff_alerts",
+              "type": "loop",
+              "items": "{{ $json.students }}",
+              "steps": [
+                {
+                  "id": "personalized_notification",
+                  "type": "ai_service",
+                  "service": "gemini",
+                  "prompt": "Generate a personalized cutoff update message for student {{ $item.name }} about {{ $json.college_name }} - {{ $json.course_name }}. New cutoff: {{ $json.new_cutoff }}, Previous: {{ $json.old_cutoff }}. Student's percentile: {{ $item.percentile }}"
+                },
+                {
+                  "id": "send_update",
+                  "type": "notification",
+                  "service": "multi_channel",
+                  "channels": ["email", "push", "sms"],
+                  "to": "{{ $item.contact_info }}",
+                  "message": "{{ $json.personalized_message }}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "aiChatbotTraining": {
+      "name": "AI Chatbot Continuous Training",
+      "trigger": "schedule",
+      "schedule": "0 2 * * 0",
+      "description": "Weekly analysis of chatbot interactions for training improvements",
+      "steps": [
+        {
+          "id": "collect_interaction_data",
+          "type": "database",
+          "action": "select",
+          "query": "SELECT * FROM chatbot_interactions WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
+        },
+        {
+          "id": "analyze_common_queries",
+          "type": "ai_service",
+          "service": "gemini",
+          "action": "analyze_patterns",
+          "data": "{{ $json.interactions }}"
+        },
+        {
+          "id": "identify_gaps",
+          "type": "function",
+          "code": "identifyKnowledgeGaps({{ $json.patterns }}, {{ $json.responses }})"
+        },
+        {
+          "id": "generate_training_data",
+          "type": "ai_service",
+          "service": "gemini",
+          "action": "generate_qa_pairs",
+          "context": "College admissions for Indian engineering students",
+          "gaps": "{{ $json.knowledge_gaps }}"
+        },
+        {
+          "id": "update_knowledge_base",
+          "type": "database",
+          "action": "insert",
+          "table": "chatbot_knowledge_base",
+          "data": "{{ $json.training_data }}"
+        },
+        {
+          "id": "performance_report",
+          "type": "email",
+          "to": "ai-team@admitai.com",
+          "subject": "Weekly AI Training Report",
+          "template": "ai_training_report",
+          "data": {
+            "interactions_count": "{{ $json.total_interactions }}",
+            "satisfaction_score": "{{ $json.avg_satisfaction }}",
+            "new_patterns": "{{ $json.patterns }}",
+            "knowledge_gaps": "{{ $json.gaps }}"
+          }
+        }
+      ]
+    },
+    "personalizedRecommendations": {
+      "name": "Personalized College Recommendations",
+      "trigger": "user_action",
+      "action": "profile_update",
+      "description": "Generates personalized recommendations when user updates profile",
+      "steps": [
+        {
+          "id": "user_profile_updated",
+          "type": "webhook",
+          "endpoint": "/webhook/profile-update",
+          "data": {
+            "user_id": "{{ $json.user_id }}",
+            "updated_fields": "{{ $json.updated_fields }}",
+            "scores": "{{ $json.scores }}",
+            "preferences": "{{ $json.preferences }}"
+          }
+        },
+        {
+          "id": "fetch_user_data",
+          "type": "database",
+          "action": "select",
+          "query": "SELECT * FROM users u JOIN user_preferences p ON u.id = p.user_id WHERE u.id = {{ $json.user_id }}"
+        },
+        {
+          "id": "run_recommendation_algorithm",
+          "type": "ai_service",
+          "service": "machine_learning",
+          "model": "college_recommendation_v2",
+          "input": {
+            "percentile": "{{ $json.user.percentile }}",
+            "category": "{{ $json.user.category }}",
+            "preferred_branches": "{{ $json.user.preferred_branches }}",
+            "budget": "{{ $json.user.budget }}",
+            "location_preference": "{{ $json.user.location_preference }}"
+          }
+        },
+        {
+          "id": "enrich_recommendations",
+          "type": "loop",
+          "items": "{{ $json.recommendations }}",
+          "steps": [
+            {
+              "id": "fetch_college_details",
+              "type": "database",
+              "action": "select",
+              "query": "SELECT * FROM colleges WHERE id = {{ $item.college_id }}"
+            },
+            {
+              "id": "calculate_admission_probability",
+              "type": "function",
+              "code": "calculateAdmissionProbability({{ $json.user }}, {{ $json.college }})"
+            },
+            {
+              "id": "generate_explanation",
+              "type": "ai_service",
+              "service": "gemini",
+              "prompt": "Explain why {{ $json.college.name }} is recommended for a student with {{ $json.user.percentile }} percentile in {{ $json.user.category }} category"
+            }
+          ]
+        },
+        {
+          "id": "save_recommendations",
+          "type": "database",
+          "action": "insert",
+          "table": "user_recommendations",
+          "data": {
+            "user_id": "{{ $json.user_id }}",
+            "recommendations": "{{ $json.enriched_recommendations }}",
+            "generated_at": "{{ $now }}"
+          }
+        },
+        {
+          "id": "send_recommendation_update",
+          "type": "notification",
+          "service": "email",
+          "to": "{{ $json.user.email }}",
+          "subject": "🎯 New College Recommendations Available!",
+          "template": "recommendation_update",
+          "data": {
+            "user_name": "{{ $json.user.name }}",
+            "recommendation_count": "{{ $json.recommendations.length }}",
+            "top_college": "{{ $json.recommendations[0].college_name }}"
+          }
+        }
+      ]
+    }
+  },
+  "integrations": {
+    "vapi": {
+      "service_type": "voice_ai",
+      "endpoint": "https://api.vapi.ai/v1/",
+      "features": ["voice_input", "voice_output", "conversation_ai"],
+      "config": {
+        "voice_model": "eleven_labs_v2",
+        "language": "en-IN",
+        "accent": "indian_english"
+      }
+    },
+    "retell_ai": {
+      "service_type": "conversation_ai",
+      "endpoint": "https://api.retellai.com/v1/",
+      "features": ["phone_calls", "voice_agents", "real_time_transcription"],
+      "config": {
+        "agent_voice": "professional_female",
+        "language": "english",
+        "response_speed": "fast"
+      }
+    },
+    "eleven_labs": {
+      "service_type": "voice_synthesis",
+      "endpoint": "https://api.elevenlabs.io/v1/",
+      "features": ["text_to_speech", "voice_cloning", "voice_library"],
+      "config": {
+        "voice_id": "21m00Tcm4TlvDq8ikWAM",
+        "model_id": "eleven_monolingual_v1",
+        "voice_settings": {
+          "stability": 0.7,
+          "similarity_boost": 0.8
+        }
+      }
+    },
+    "bland_ai": {
+      "service_type": "chatbot_embedding",
+      "endpoint": "https://api.bland.ai/v1/",
+      "features": ["chatbot_embedding", "conversation_analytics", "lead_qualification"],
+      "config": {
+        "embedding_style": "floating_button",
+        "theme": "admitai_blue",
+        "position": "bottom_right"
+      }
+    },
+    "aws": {
+      "service_type": "cloud_hosting",
+      "services": {
+        "ec2": {
+          "instance_type": "t3.medium",
+          "region": "ap-south-1",
+          "auto_scaling": true
+        },
+        "rds": {
+          "engine": "postgresql",
+          "instance_class": "db.t3.micro",
+          "multi_az": false
+        },
+        "s3": {
+          "bucket": "admitai-documents",
+          "region": "ap-south-1"
+        },
+        "lambda": {
+          "runtime": "python3.9",
+          "timeout": 30
+        },
+        "ses": {
+          "region": "ap-south-1",
+          "verified_email": "noreply@admitai.com"
+        }
+      }
+    },
+    "google_gemini": {
+      "service_type": "ai_assistant",
+      "api_key": "AIzaSyC-2jr4RlBvKWW8sdjdGjJBQ1ujHR-D2Xs",
+      "model": "gemini-pro",
+      "features": ["text_generation", "conversation", "content_analysis"]
+    }
+  },
+  "monitoring": {
+    "uptime_monitoring": {
+      "service": "aws_cloudwatch",
+      "check_interval": "1_minute",
+      "alert_channels": ["email", "slack"]
+    },
+    "performance_monitoring": {
+      "service": "new_relic",
+      "metrics": ["response_time", "error_rate", "throughput"]
+    },
+    "user_analytics": {
+      "service": "google_analytics",
+      "events": ["chatbot_interaction", "college_search", "document_upload"]
+    }
+  },
+  "deployment": {
+    "environment": "production",
+    "auto_scaling": true,
+    "health_checks": true,
+    "backup_strategy": "daily",
+    "cdn": "aws_cloudfront",
+    "ssl": "aws_certificate_manager"
+  }
+}

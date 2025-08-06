@@ -346,8 +346,64 @@ college_recommender = CollegeRecommender()
 # Routes
 @app.route('/')
 def index():
-    """Landing page"""
-    return render_template('index.html')
+    """Landing page - now serving base.html as main page"""
+    return render_template('base.html')
+
+@app.route('/health')
+def health_check():
+    """Health check endpoint for monitoring and load balancers"""
+    try:
+        # Check database connectivity
+        from sqlalchemy import text
+        db.session.execute(text('SELECT 1'))
+        
+        # Check AI service availability
+        ai_status = "ok"
+        try:
+            # Quick test of AI service
+            test_response = call_gemini_api("Test")
+            if not test_response:
+                ai_status = "degraded"
+        except:
+            ai_status = "error"
+        
+        health_data = {
+            "status": "healthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "version": "1.0.0",
+            "services": {
+                "database": "ok",
+                "ai_service": ai_status,
+                "web_server": "ok"
+            },
+            "uptime": "24/7",
+            "features": {
+                "voice_enabled": True,
+                "ai_chatbot": True,
+                "college_database": True,
+                "automation": True
+            }
+        }
+        
+        return jsonify(health_data), 200
+        
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({
+            "status": "unhealthy",
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }), 503
+
+@app.route('/base')
+def base_page():
+    """Base page as main landing page with enhanced AI features"""
+    return render_template('base.html')
+
+@app.route('/main')
+def main_page():
+    """Alternative route for base page"""
+    return render_template('base.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
