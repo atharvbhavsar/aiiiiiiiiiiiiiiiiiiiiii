@@ -1,0 +1,464 @@
+{% extends "base.html" %}
+
+{% block title %}Tech Stacks - AdmitAI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4 gradient-text">AdmitAI Tech Stack</h1>
+        <p class="text-gray-600">Explore the cutting-edge technologies powering our platform</p>
+    </div>
+    
+    <!-- Architecture Overview -->
+    <div class="mb-10">
+        <h2 class="text-2xl font-semibold mb-4">Architecture Overview</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex flex-col items-center">
+                <div class="w-full max-w-4xl p-4 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-auto">
+                    <pre class="text-sm text-gray-800 dark:text-gray-200">
++---------------------+      +---------------------+      +---------------------+
+|                     |      |                     |      |                     |
+|  Frontend           |      |  Backend            |      |  AI Services        |
+|  - React/Vue        +----->+  - Flask            +----->+  - OpenAI API       |
+|  - Tailwind CSS     |      |  - MongoDB          |      |  - Google Gemini    |
+|  - JavaScript       |      |  - AWS Lambda       |      |  - ElevenLabs       |
+|                     |      |                     |      |  - Vapi/Retell      |
++---------------------+      +---------------------+      +---------------------+
+                                       |
+                                       v
+                              +---------------------+
+                              |                     |
+                              |  Automation         |
+                              |  - n8n              |
+                              |  - Make.com         |
+                              |  - AWS Services     |
+                              |                     |
+                              +---------------------+
+                    </pre>
+                </div>
+                <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">Architecture diagram showing how different tech stacks are integrated</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Voice & Call Technologies -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">AI Voice & Call Technologies</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Vapi -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-microphone text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Vapi</h3>
+                </div>
+                <p class="text-gray-600 mb-3">API-first platform for building voice AI agents with web and phone integration.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> 100+ languages support</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Integration with OpenAI & ElevenLabs</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Scalable deployment</div>
+                </div>
+            </div>
+
+            <!-- Retell AI -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-phone-alt text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Retell AI</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Voice AI platform for creating natural-sounding conversational agents.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Real-time voice cloning</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> n8n workflow integration</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Low latency responses</div>
+                </div>
+            </div>
+
+            <!-- ElevenLabs -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-volume-up text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">ElevenLabs</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Advanced text-to-speech platform with realistic voice generation.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> In-house TTS & STT models</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Low latency processing</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Multi-language support</div>
+                </div>
+            </div>
+
+            <!-- Bland AI -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-headset text-red-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Bland AI</h3>
+                </div>
+                <p class="text-gray-600 mb-3">AI phone call automation platform for customer interactions.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Automated phone calls</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Natural conversation flow</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> API integration</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Automation & Integration -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">Automation & Integration</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- n8n -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-cogs text-yellow-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">n8n</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Open-source workflow automation tool with visual programming.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> 200+ integrations</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Self-hosted option</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Custom nodes support</div>
+                </div>
+            </div>
+
+            <!-- Make (Integromat) -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-plug text-indigo-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Make (Integromat)</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Visual automation platform for connecting apps and services.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> No-code/low-code platform</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Conditional logic & error handling</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Webhook & RPC support</div>
+                </div>
+            </div>
+
+            <!-- AWS -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fab fa-aws text-orange-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">AWS</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Cloud computing platform with comprehensive services.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Lambda serverless computing</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> API Gateway integration</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Secrets Manager for API keys</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI & LLM Integration -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">AI & LLM Integration</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- OpenAI API -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-brain text-teal-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">OpenAI API</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Advanced language models for natural language processing and generation.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> GPT-4 integration</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Embeddings for semantic search</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Fine-tuning capabilities</div>
+                </div>
+            </div>
+
+            <!-- Google Gemini API -->
+            <div class="border rounded-lg p-4 hover:shadow-lg transition-all">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <i class="fab fa-google text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Google Gemini API</h3>
+                </div>
+                <p class="text-gray-600 mb-3">Google's multimodal AI model for text, image, and code generation.</p>
+                <div class="text-sm text-gray-500">
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Multimodal capabilities</div>
+                    <div class="flex items-center mb-1"><i class="fas fa-check text-green-500 mr-2"></i> Advanced reasoning</div>
+                    <div class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Context-aware responses</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">System Architecture</h2>
+        
+        <div class="border p-4 rounded-lg">
+            <div class="text-center mb-4">
+                <h3 class="text-lg font-medium">AdmitAI Integration Architecture</h3>
+            </div>
+            
+            <div class="flex justify-center">
+                <div class="w-full max-w-4xl">
+                    <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                        <!-- Frontend Layer -->
+                        <rect x="50" y="50" width="700" height="80" rx="5" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+                        <text x="400" y="90" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#0284c7">AdmitAI Frontend (Flask Templates, JavaScript)</text>
+                        
+                        <!-- Backend Layer -->
+                        <rect x="50" y="150" width="700" height="80" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                        <text x="400" y="190" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#2563eb">AdmitAI Backend (Flask, Python)</text>
+                        
+                        <!-- Integration Layer -->
+                        <rect x="50" y="250" width="700" height="150" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+                        <text x="400" y="275" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#16a34a">Integration Layer</text>
+                        
+                        <!-- Integration Components -->
+                        <rect x="80" y="290" width="150" height="50" rx="5" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+                        <text x="155" y="320" text-anchor="middle" font-family="Arial" font-size="14" fill="#0d9488">Voice AI (Vapi/Retell)</text>
+                        
+                        <rect x="250" y="290" width="150" height="50" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+                        <text x="325" y="320" text-anchor="middle" font-family="Arial" font-size="14" fill="#059669">TTS (ElevenLabs)</text>
+                        
+                        <rect x="420" y="290" width="150" height="50" rx="5" fill="#f0f9ff" stroke="#0369a1" stroke-width="2"/>
+                        <text x="495" y="320" text-anchor="middle" font-family="Arial" font-size="14" fill="#0369a1">Automation (n8n/Make)</text>
+                        
+                        <rect x="590" y="290" width="150" height="50" rx="5" fill="#fef2f2" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="665" y="320" text-anchor="middle" font-family="Arial" font-size="14" fill="#b91c1c">Call API (Bland AI)</text>
+                        
+                        <rect x="165" y="350" width="150" height="50" rx="5" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+                        <text x="240" y="380" text-anchor="middle" font-family="Arial" font-size="14" fill="#c2410c">AWS Services</text>
+                        
+                        <rect x="335" y="350" width="150" height="50" rx="5" fill="#f8fafc" stroke="#475569" stroke-width="2"/>
+                        <text x="410" y="380" text-anchor="middle" font-family="Arial" font-size="14" fill="#475569">OpenAI API</text>
+                        
+                        <rect x="505" y="350" width="150" height="50" rx="5" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+                        <text x="580" y="380" text-anchor="middle" font-family="Arial" font-size="14" fill="#3b82f6">Gemini API</text>
+                        
+                        <!-- Data Layer -->
+                        <rect x="50" y="420" width="700" height="80" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                        <text x="400" y="460" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#d97706">Data Layer (SQLite, MongoDB)</text>
+                        
+                        <!-- Connection Lines -->
+                        <line x1="400" y1="130" x2="400" y2="150" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="400" y1="230" x2="400" y2="250" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                        <line x1="400" y1="400" x2="400" y2="420" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Integration Code Examples -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Integration Code Examples</h2>
+        
+        <div class="mb-6">
+            <h3 class="text-lg font-medium mb-2">Vapi Voice AI Integration</h3>
+            <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-javascript">// Vapi Voice AI Integration Example
+const vapi = require('@vapi-ai/web');
+
+const assistant = new vapi.Assistant({
+  apiKey: 'your-vapi-api-key',
+  assistantId: 'your-assistant-id',
+  config: {
+    tts: {
+      provider: 'elevenlabs',
+      voiceId: 'voice-id'
+    },
+    llm: {
+      provider: 'openai',
+      model: 'gpt-4'
+    }
+  }
+});
+
+// Start the conversation
+assistant.start();
+
+// Handle assistant events
+assistant.on('message', (message) => {
+  console.log('Assistant:', message.text);
+});</code></pre>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-lg font-medium mb-2">ElevenLabs Text-to-Speech</h3>
+            <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-python"># ElevenLabs TTS Integration
+import requests
+
+def generate_speech(text, voice_id="your-voice-id"):
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": "your-elevenlabs-api-key"
+    }
+    
+    data = {
+        "text": text,
+        "model_id": "eleven_monolingual_v1",
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.5
+        }
+    }
+    
+    response = requests.post(url, json=data, headers=headers)
+    
+    if response.status_code == 200:
+        with open("speech.mp3", "wb") as f:
+            f.write(response.content)
+        return "speech.mp3"
+    else:
+        return None</code></pre>
+        </div>
+        
+        <div class="mb-6">
+            <h3 class="text-lg font-medium mb-2">AWS Lambda Integration</h3>
+            <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-javascript">// AWS Lambda Function for OpenAI Integration
+const AWS = require('aws-sdk');
+const { Configuration, OpenAIApi } = require('openai');
+
+const secretsManager = new AWS.SecretsManager();
+
+exports.handler = async (event) => {
+    // Get OpenAI API key from AWS Secrets Manager
+    const secretData = await secretsManager.getSecretValue({
+        SecretId: 'openai-api-key'
+    }).promise();
+    
+    const openaiApiKey = JSON.parse(secretData.SecretString).apiKey;
+    
+    // Configure OpenAI
+    const configuration = new Configuration({
+        apiKey: openaiApiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+    
+    // Process the request
+    try {
+        const { prompt } = JSON.parse(event.body);
+        
+        const response = await openai.createCompletion({
+            model: "gpt-4",
+            prompt: prompt,
+            max_tokens: 1000,
+            temperature: 0.7,
+        });
+        
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                result: response.data.choices[0].text.trim()
+            }),
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message }),
+        };
+    }
+};</code></pre>
+        </div>
+        
+        <div>
+            <h3 class="text-lg font-medium mb-2">n8n Workflow Integration</h3>
+            <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-json">{
+  "nodes": [
+    {
+      "parameters": {
+        "path": "webhook",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "apiKey",
+        "apiKey": "{{ $node[\"Credentials\"].json[\"retellApiKey\"] }}",
+        "resource": "call",
+        "operation": "create",
+        "agentId": "{{ $node[\"Webhook\"].json[\"agentId\"] }}",
+        "phoneNumber": "{{ $node[\"Webhook\"].json[\"phoneNumber\"] }}",
+        "options": {}
+      },
+      "name": "Retell AI",
+      "type": "n8n-nodes-base.retellAi",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "callId",
+              "value": "={{ $node[\"Retell AI\"].json[\"id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "success"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Retell AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retell AI": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

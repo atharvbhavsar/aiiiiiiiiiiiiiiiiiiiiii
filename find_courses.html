@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Find Courses - AdmitAI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-8 mb-8">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">Find Your Perfect Course</h1>
+        <p class="text-xl text-blue-100">Explore engineering entrance exams and discover colleges that match your aspirations</p>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+    <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1">
+            <input type="text" id="search-exams" placeholder="Search exams..." 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex gap-2">
+            <select id="filter-level" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All Levels</option>
+                <option value="national">National Level</option>
+                <option value="state">State Level</option>
+                <option value="university">University Level</option>
+            </select>
+            <select id="filter-state" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All States</option>
+                <option value="maharashtra">Maharashtra</option>
+                <option value="delhi">Delhi</option>
+                <option value="karnataka">Karnataka</option>
+                <option value="tamil-nadu">Tamil Nadu</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Exams Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for exam in exams %}
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="p-6">
+            <!-- Exam Header -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                </div>
+                <div class="text-right">
+                    <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                        Active
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Exam Info -->
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ exam.name }}</h3>
+            <p class="text-gray-600 mb-4">{{ exam.full_name }}</p>
+            
+            <!-- Exam Details -->
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-calendar-alt w-5 text-blue-500"></i>
+                    <span class="ml-2">Exam Date: {{ exam.exam_date }}</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-clock w-5 text-orange-500"></i>
+                    <span class="ml-2">Deadline: {{ exam.application_deadline }}</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-users w-5 text-green-500"></i>
+                    <span class="ml-2">Total Seats: {{ exam.total_seats or 'N/A' }}</span>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            {% if exam.description %}
+            <p class="text-gray-600 text-sm mb-6">{{ exam.description }}</p>
+            {% endif %}
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="{{ url_for('exam_details', exam_id=exam.id) }}" 
+                   class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-center font-medium hover:from-blue-600 hover:to-purple-700 transition-all">
+                    <i class="fas fa-info-circle mr-2"></i>View Details
+                </a>
+                <a href="{{ url_for('exam_colleges', exam_id=exam.id) }}" 
+                   class="flex-1 border border-blue-500 text-blue-600 px-4 py-2 rounded-lg text-center font-medium hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-university mr-2"></i>View Colleges
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Popular Exams Section -->
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Popular Engineering Entrance Exams</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- JEE Main -->
+        <div class="bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-lg p-6 text-center">
+            <i class="fas fa-rocket text-3xl mb-3"></i>
+            <h3 class="font-semibold mb-2">JEE Main</h3>
+            <p class="text-sm opacity-90">National Level</p>
+            <p class="text-xs opacity-75 mt-2">Most Popular</p>
+        </div>
+        
+        <!-- MHT CET -->
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-6 text-center">
+            <i class="fas fa-map-marker-alt text-3xl mb-3"></i>
+            <h3 class="font-semibold mb-2">MHT CET</h3>
+            <p class="text-sm opacity-90">Maharashtra</p>
+            <p class="text-xs opacity-75 mt-2">State Level</p>
+        </div>
+        
+        <!-- BITSAT -->
+        <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg p-6 text-center">
+            <i class="fas fa-university text-3xl mb-3"></i>
+            <h3 class="font-semibold mb-2">BITSAT</h3>
+            <p class="text-sm opacity-90">University Level</p>
+            <p class="text-xs opacity-75 mt-2">BITS Pilani</p>
+        </div>
+        
+        <!-- VITEEE -->
+        <div class="bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg p-6 text-center">
+            <i class="fas fa-star text-3xl mb-3"></i>
+            <h3 class="font-semibold mb-2">VITEEE</h3>
+            <p class="text-sm opacity-90">University Level</p>
+            <p class="text-xs opacity-75 mt-2">VIT University</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exam Comparison -->
+<div class="mt-12 bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Exam Comparison</h2>
+    
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-gray-200">
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Exam</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Level</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Exam Date</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Deadline</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Colleges</th>
+                    <th class="text-left py-3 px-4 font-semibold text-gray-800">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in exams %}
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-graduation-cap text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">{{ exam.name }}</div>
+                                <div class="text-xs text-gray-500">{{ exam.full_name }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                            {% if 'JEE' in exam.name %}National{% elif 'MHT' in exam.name %}State{% else %}University{% endif %}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-gray-600">{{ exam.exam_date }}</td>
+                    <td class="py-3 px-4 text-gray-600">{{ exam.application_deadline }}</td>
+                    <td class="py-3 px-4 text-gray-600">{{ exam.total_seats or 'N/A' }}</td>
+                    <td class="py-3 px-4">
+                        <a href="{{ url_for('exam_colleges', exam_id=exam.id) }}" 
+                           class="text-blue-600 hover:text-blue-700 font-medium">
+                            View Colleges
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Quick Tips -->
+<div class="mt-12 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Quick Tips for Choosing Your Exam</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <h3 class="font-semibold text-gray-800 mb-3">Consider Your Goals</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>National level exams for broader opportunities</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>State level exams for local colleges</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>University level exams for specific institutions</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3 class="font-semibold text-gray-800 mb-3">Check Eligibility</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>Age and educational qualification requirements</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>Subject combination requirements</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>Reservation and category criteria</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Search functionality
+    document.getElementById('search-exams').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const examCards = document.querySelectorAll('.card-hover');
+        
+        examCards.forEach(card => {
+            const examName = card.querySelector('h3').textContent.toLowerCase();
+            const examDesc = card.querySelector('p').textContent.toLowerCase();
+            
+            if (examName.includes(searchTerm) || examDesc.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+    
+    // Filter functionality
+    document.getElementById('filter-level').addEventListener('change', function() {
+        // Implement level filtering
+        console.log('Filter by level:', this.value);
+    });
+    
+    document.getElementById('filter-state').addEventListener('change', function() {
+        // Implement state filtering
+        console.log('Filter by state:', this.value);
+    });
+</script>
+{% endblock %} 

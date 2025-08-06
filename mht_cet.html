@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}MHT-CET - AdmitAI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-8 mb-8">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4">MHT-CET</h1>
+        <p class="text-xl text-blue-100">Maharashtra Common Entrance Test for Engineering Admissions</p>
+    </div>
+</div>
+
+<!-- Exam Information -->
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">About MHT-CET</h2>
+            <p class="text-gray-600 mb-4">
+                MHT-CET (Maharashtra Common Entrance Test) is a state-level entrance examination conducted by the State Common Entrance Test Cell, Maharashtra for admission to Engineering and Technology, Pharmacy and Agricultural Education courses offered by various colleges in Maharashtra.
+            </p>
+            <div class="space-y-3">
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-calendar-alt w-5 text-blue-500"></i>
+                    <span class="ml-2">Exam Date: May 2023</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-clock w-5 text-orange-500"></i>
+                    <span class="ml-2">Application Deadline: April 2023</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                    <i class="fas fa-globe w-5 text-green-500"></i>
+                    <span class="ml-2">Official Website: <a href="https://cetcell.mahacet.org/" class="text-blue-600 hover:underline" target="_blank">cetcell.mahacet.org</a></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Exam Pattern</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-medium text-gray-800">Physics & Chemistry</h3>
+                    <p class="text-sm text-gray-600">50 questions each, 100 marks each</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-800">Mathematics</h3>
+                    <p class="text-sm text-gray-600">50 questions, 100 marks</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-800">Total Duration</h3>
+                    <p class="text-sm text-gray-600">180 minutes (90 minutes for PCM each)</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-800">Marking Scheme</h3>
+                    <p class="text-sm text-gray-600">+2 for correct answer, no negative marking</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- College Filters -->
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Find Colleges by Filters</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+            <label for="college-name" class="block text-sm font-medium text-gray-700 mb-1">College Name</label>
+            <input type="text" id="college-name" placeholder="Search by college name..." 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+            <label for="course-name" class="block text-sm font-medium text-gray-700 mb-1">Course</label>
+            <select id="course-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All Courses</option>
+                <option value="Computer">Computer Engineering/Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Mechanical">Mechanical Engineering</option>
+                <option value="Electrical">Electrical Engineering</option>
+                <option value="Civil">Civil Engineering</option>
+            </select>
+        </div>
+        <div>
+            <label for="college-status" class="block text-sm font-medium text-gray-700 mb-1">College Type</label>
+            <select id="college-status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All Types</option>
+                <option value="Autonomous">Autonomous</option>
+                <option value="Government">Government</option>
+                <option value="Government-Aided">Government-Aided</option>
+                <option value="Private">Private</option>
+            </select>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select id="category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All Categories</option>
+                <option value="GOPENS">GOPENS (General Open)</option>
+                <option value="GSCS">GSCS (Scheduled Caste)</option>
+                <option value="GOBCS">GOBCS (OBC)</option>
+                <option value="GVJS">GVJS (VJ/DT)</option>
+                <option value="GNT3S">GNT3S (NT)</option>
+                <option value="LOPENS">LOPENS (Ladies Open)</option>
+                <option value="EWS">EWS (Economically Weaker Section)</option>
+                <option value="TFWS">TFWS (Tuition Fee Waiver Scheme)</option>
+            </select>
+        </div>
+        <div>
+            <label for="min-percentile" class="block text-sm font-medium text-gray-700 mb-1">Minimum Percentile</label>
+            <input type="number" id="min-percentile" placeholder="Minimum percentile..." min="0" max="100" step="0.01"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex items-end">
+            <button id="apply-filters" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-filter mr-2"></i>Apply Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Colleges Grid -->
+<div id="colleges-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- College cards will be loaded here dynamically -->
+    <div class="col-span-full text-center py-8 text-gray-500">
+        <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+        <p>Loading colleges...</p>
+    </div>
+</div>
+
+<!-- College Card Template -->
+<template id="college-card-template">
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
+        <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1 college-name"></h3>
+                    <div class="flex items-center">
+                        <span class="text-sm text-white px-2 py-1 rounded-full college-status"></span>
+                    </div>
+                </div>
+                <button class="save-college-btn text-gray-400 hover:text-yellow-500">
+                    <i class="far fa-bookmark"></i>
+                </button>
+            </div>
+            
+            <div class="mt-4">
+                <h4 class="font-medium text-gray-800 mb-2">Available Courses:</h4>
+                <ul class="courses-list space-y-2 text-sm text-gray-600"></ul>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <a href="#" class="view-details-btn inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                    View Details
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- JavaScript for College Filtering -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial load of colleges
+    loadColleges();
+    
+    // Event listener for filter button
+    document.getElementById('apply-filters').addEventListener('click', function() {
+        loadColleges();
+    });
+    
+    // Function to load colleges with filters
+    function loadColleges() {
+        // Show loading state
+        document.getElementById('colleges-container').innerHTML = `
+            <div class="col-span-full text-center py-8 text-gray-500">
+                <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                <p>Loading colleges...</p>
+            </div>
+        `;
+        
+        // Get filter values
+        const collegeName = document.getElementById('college-name').value;
+        const courseName = document.getElementById('course-name').value;
+        const status = document.getElementById('college-status').value;
+        const category = document.getElementById('category').value;
+        const minPercentile = document.getElementById('min-percentile').value;
+        
+        // Build query parameters
+        const params = new URLSearchParams();
+        if (collegeName) params.append('college_name', collegeName);
+        if (courseName) params.append('course_name', courseName);
+        if (status) params.append('status', status);
+        if (category) params.append('category', category);
+        if (minPercentile) params.append('min_percentile', minPercentile);
+        
+        // Fetch colleges with filters
+        fetch(`/api/mongodb-colleges?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayColleges(data.colleges);
+                } else {
+                    showError(data.error || 'Failed to load colleges');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching colleges:', error);
+                showError('Failed to load colleges. Please try again.');
+            });
+    }
+    
+    // Function to display colleges
+    function displayColleges(colleges) {
+        const container = document.getElementById('colleges-container');
+        const template = document.getElementById('college-card-template');
+        
+        // Clear container
+        container.innerHTML = '';
+        
+        if (colleges.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full text-center py-8 text-gray-500">
+                    <i class="fas fa-search text-3xl mb-4"></i>
+                    <p>No colleges found matching your criteria. Try adjusting your filters.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Create college cards
+        colleges.forEach(college => {
+            const card = document.importNode(template.content, true);
+            
+            // Set college name and status
+            card.querySelector('.college-name').textContent = college.collegeName;
+            
+            const statusElement = card.querySelector('.college-status');
+            statusElement.textContent = college.status;
+            
+            // Set status color based on college type
+            if (college.status.includes('Autonomous')) {
+                statusElement.classList.add('bg-purple-600');
+            } else if (college.status.includes('Government')) {
+                statusElement.classList.add('bg-green-600');
+            } else if (college.status.includes('Private')) {
+                statusElement.classList.add('bg-blue-600');
+            } else {
+                statusElement.classList.add('bg-gray-600');
+            }
+            
+            // Add courses
+            const coursesList = card.querySelector('.courses-list');
+            college.courses.forEach(course => {
+                const courseItem = document.createElement('li');
+                courseItem.className = 'flex items-center';
+                courseItem.innerHTML = `
+                    <i class="fas fa-graduation-cap text-blue-500 mr-2"></i>
+                    <span>${course.courseName}</span>
+                `;
+                coursesList.appendChild(courseItem);
+                
+                // Add cutoff info if available
+                if (course.seatTypes && Object.keys(course.seatTypes).length > 0) {
+                    const cutoffInfo = document.createElement('ul');
+                    cutoffInfo.className = 'ml-6 mt-1 text-xs text-gray-500';
+                    
+                    // Get first level (usually stateLevel)
+                    const level = Object.keys(course.seatTypes)[0];
+                    const categories = course.seatTypes[level];
+                    
+                    // Show up to 3 categories
+                    const categoriesToShow = Object.keys(categories).slice(0, 3);
+                    categoriesToShow.forEach(cat => {
+                        const percentile = categories[cat].meritPercentile;
+                        cutoffInfo.innerHTML += `<li>${cat}: ${parseFloat(percentile).toFixed(2)} percentile</li>`;
+                    });
+                    
+                    courseItem.appendChild(cutoffInfo);
+                }
+            });
+            
+            // Add to container
+            container.appendChild(card);
+        });
+    }
+    
+    // Function to show error
+    function showError(message) {
+        const container = document.getElementById('colleges-container');
+        container.innerHTML = `
+            <div class="col-span-full text-center py-8 text-gray-500">
+                <i class="fas fa-exclamation-circle text-red-500 text-3xl mb-4"></i>
+                <p>${message}</p>
+                <button id="retry-btn" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Retry
+                </button>
+            </div>
+        `;
+        
+        document.getElementById('retry-btn').addEventListener('click', loadColleges);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Option Form Assistant - AdmitAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Option Form Assistant</h1>
+            <p class="text-gray-600">Get AI-powered assistance to fill your college preference form</p>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">AI Assistant</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="user_query" class="block text-sm font-medium text-gray-700 mb-2">Ask about option form filling:</label>
+                    <textarea id="user_query" rows="4" placeholder="e.g., How should I prioritize colleges? What factors should I consider? How many colleges should I fill?"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                <button onclick="askAI()" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Ask AI Assistant
+                </button>
+            </div>
+            <div id="ai_response" class="mt-4 p-4 bg-blue-50 rounded-md hidden">
+                <div id="response_text"></div>
+            </div>
+        </div>
+
+        <!-- Option Form Guide -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Option Form Guide</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">📋 What is an Option Form?</h3>
+                    <p class="text-gray-600">An option form is where you list your preferred colleges and branches in order of preference. This determines your admission chances.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">🎯 How to Prioritize Colleges</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• <strong>Rank by preference:</strong> Put your dream college first</li>
+                        <li>• <strong>Consider cutoffs:</strong> Check if your percentile meets the requirements</li>
+                        <li>• <strong>Location preference:</strong> Consider distance from home</li>
+                        <li>• <strong>Fee structure:</strong> Ensure it fits your budget</li>
+                        <li>• <strong>Placement records:</strong> Check average packages</li>
+                        <li>• <strong>Branch preference:</strong> Choose your preferred engineering branch</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">⚠️ Important Tips</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• <strong>Fill maximum options:</strong> Don't leave slots empty</li>
+                        <li>• <strong>Realistic choices:</strong> Include colleges where you have good chances</li>
+                        <li>• <strong>Backup options:</strong> Include some safer choices</li>
+                        <li>• <strong>Branch variety:</strong> Consider multiple branches</li>
+                        <li>• <strong>Deadline:</strong> Submit before the last date</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Option Form -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Sample Option Form Structure</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Option No.</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">College</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Branch</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Your Chance</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">1</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">COEP Technological University</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Computer Engineering</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">General</td>
+                            <td class="px-4 py-3 text-sm text-green-600 font-medium">High</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">2</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">VJTI, Mumbai</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Information Technology</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">General</td>
+                            <td class="px-4 py-3 text-sm text-yellow-600 font-medium">Medium</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">3</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">PICT, Pune</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Computer Engineering</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">General</td>
+                            <td class="px-4 py-3 text-sm text-green-600 font-medium">High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="{{ url_for('saved_colleges') }}" 
+                   class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">View Saved Colleges</h3>
+                        <p class="text-gray-600">Check your saved colleges for option form</p>
+                    </div>
+                </a>
+                <a href="{{ url_for('check_eligibility') }}" 
+                   class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Check Eligibility</h3>
+                        <p class="text-gray-600">Find colleges matching your percentile</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function askAI() {
+    const query = document.getElementById('user_query').value;
+    if (!query.trim()) {
+        alert('Please enter your question first.');
+        return;
+    }
+
+    // Show loading
+    document.getElementById('ai_response').classList.remove('hidden');
+    document.getElementById('response_text').innerHTML = '🤔 Thinking...';
+
+    // Call AI API
+    fetch('/chatbot', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            message: `I need help with option form filling. ${query}`
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('response_text').innerHTML = data.response.replace(/\n/g, '<br>');
+    })
+    .catch(error => {
+        document.getElementById('response_text').innerHTML = 'Sorry, I couldn\'t process your request. Please try again.';
+    });
+}
+</script>
+{% endblock %} 

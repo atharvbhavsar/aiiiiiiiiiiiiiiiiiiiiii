@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Fees & Scholarships - AdmitAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Fees & Scholarships</h1>
+            <p class="text-gray-600">Explore fee structures and available scholarships</p>
+        </div>
+
+        <!-- Scholarships -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Available Scholarships</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for scholarship in scholarships %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ scholarship.name }}</h3>
+                                <p class="text-sm text-gray-600">{{ scholarship.category }}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-green-600">{{ scholarship.amount }}</div>
+                                <div class="text-xs text-gray-500">Amount</div>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-600 mb-4">{{ scholarship.description }}</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Eligibility:</span>
+                                <p class="text-sm text-gray-600">{{ scholarship.eligibility }}</p>
+                            </div>
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Deadline:</span>
+                                <span class="text-sm text-gray-600">{{ scholarship.deadline }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-2">
+                            <a href="https://{{ scholarship.website }}" target="_blank" 
+                               class="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700">
+                                Apply Now
+                            </a>
+                            <button onclick="saveScholarship('{{ scholarship.name }}')" 
+                                    class="bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Fee Structure Guide -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Understanding Fee Structure</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">🏛️ Government Colleges</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• <strong>Tuition Fee:</strong> ₹10,000 - ₹50,000/year</li>
+                        <li>• <strong>Hostel Fee:</strong> ₹20,000 - ₹40,000/year</li>
+                        <li>• <strong>Mess Fee:</strong> ₹15,000 - ₹25,000/year</li>
+                        <li>• <strong>Other Charges:</strong> ₹5,000 - ₹15,000/year</li>
+                        <li>• <strong>Total:</strong> ₹50,000 - ₹1,30,000/year</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">🏢 Private Colleges</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• <strong>Tuition Fee:</strong> ₹1,00,000 - ₹3,00,000/year</li>
+                        <li>• <strong>Hostel Fee:</strong> ₹40,000 - ₹80,000/year</li>
+                        <li>• <strong>Mess Fee:</strong> ₹25,000 - ₹40,000/year</li>
+                        <li>• <strong>Other Charges:</strong> ₹20,000 - ₹50,000/year</li>
+                        <li>• <strong>Total:</strong> ₹1,85,000 - ₹4,70,000/year</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category-wise Fee Benefits -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Category-wise Fee Benefits</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fee Concession</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Additional Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">General</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">No concession</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Standard fees</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">OBC</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">25-50% concession</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Reserved seats</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">SC</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">75-100% concession</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Free education, stipend</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">ST</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">75-100% concession</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Free education, stipend</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">EWS</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">10% reservation</td>
+                            <td class="px-4 py-3 text-sm text-gray-900">Income-based benefits</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Financial Planning Tips -->
+        <div class="bg-blue-50 rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-blue-900 mb-4">💡 Financial Planning Tips</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-medium text-blue-900 mb-2">Before Admission</h3>
+                    <ul class="text-blue-800 space-y-2">
+                        <li>• Research total cost including hostel and mess</li>
+                        <li>• Check if you qualify for any scholarships</li>
+                        <li>• Compare fees across multiple colleges</li>
+                        <li>• Consider distance from home (travel costs)</li>
+                        <li>• Plan for additional expenses (books, projects)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-blue-900 mb-2">During Studies</h3>
+                    <ul class="text-blue-800 space-y-2">
+                        <li>• Apply for multiple scholarships</li>
+                        <li>• Look for part-time opportunities</li>
+                        <li>• Consider education loans if needed</li>
+                        <li>• Track your expenses monthly</li>
+                        <li>• Save money for emergencies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function saveScholarship(name) {
+    // This would save the scholarship to user's profile
+    alert(`Scholarship "${name}" saved to your profile!`);
+}
+</script>
+{% endblock %} 

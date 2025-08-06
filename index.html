@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}AdmitAI - AI-Powered College Finder | Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-bg text-white py-20">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h1 class="text-5xl font-bold mb-6 leading-tight">
+                    Find Your Perfect College with
+                    <span class="text-yellow-300">AI-Powered</span> Guidance
+                </h1>
+                <p class="text-xl mb-8 text-gray-200">
+                    Get personalized college recommendations, real-time cutoff data, and expert guidance for your engineering admissions journey.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{{ url_for('signup') }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all text-center">
+                        <i class="fas fa-rocket mr-2"></i>Get Started Free
+                    </a>
+                    <a href="#features" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all text-center">
+                        <i class="fas fa-play mr-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <i class="fas fa-graduation-cap text-8xl text-yellow-300 mb-6"></i>
+                    <h3 class="text-2xl font-semibold mb-4">AI-Powered College Finder</h3>
+                    <p class="text-gray-200">Your intelligent companion for college admissions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Why Choose AdmitAI?</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Experience the future of college admissions with our AI-powered platform designed to make your journey seamless and successful.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">AI-Powered Recommendations</h3>
+                <p class="text-gray-600 mb-4">
+                    Get personalized college recommendations based on your scores, category, and preferences using advanced AI algorithms.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Smart cutoff predictions</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Admission probability analysis</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Personalized suggestions</li>
+                </ul>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-database text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Comprehensive Database</h3>
+                <p class="text-gray-600 mb-4">
+                    Access detailed information about 150+ colleges with real-time cutoff data, fees, placements, and more.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>150+ engineering colleges</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Real-time cutoff trends</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Detailed college profiles</li>
+                </ul>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-comments text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">24/7 AI Assistant</h3>
+                <p class="text-gray-600 mb-4">
+                    Get instant answers to your questions about admissions, documents, deadlines, and more through our AI chatbot.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Instant responses</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Admission guidance</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Document assistance</li>
+                </ul>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-file-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Document Management</h3>
+                <p class="text-gray-600 mb-4">
+                    Upload, verify, and track your documents with AI-powered OCR validation and automated notifications.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>OCR document validation</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Automated verification</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Status tracking</li>
+                </ul>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-bell text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Smart Notifications</h3>
+                <p class="text-gray-600 mb-4">
+                    Stay updated with important deadlines, document verification status, and admission updates through smart notifications.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Deadline reminders</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Document status updates</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Admission notifications</li>
+                </ul>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg card-hover border border-gray-100">
+                <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-green-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-chart-line text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Analytics & Insights</h3>
+                <p class="text-gray-600 mb-4">
+                    Get detailed analytics about cutoff trends, placement statistics, and admission patterns to make informed decisions.
+                </p>
+                <ul class="text-sm text-gray-500 space-y-2">
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Cutoff trend analysis</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Placement statistics</li>
+                    <li><i class="fas fa-check text-green-500 mr-2"></i>Admission insights</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">How AdmitAI Works</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Get started in just a few simple steps and unlock the power of AI-driven college admissions guidance.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Step 1 -->
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-white text-2xl font-bold">1</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Create Account</h3>
+                <p class="text-gray-600">
+                    Sign up for free and create your personalized profile with your academic details and preferences.
+                </p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-white text-2xl font-bold">2</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Enter Your Scores</h3>
+                <p class="text-gray-600">
+                    Input your exam scores, category, and preferred branches to get personalized recommendations.
+                </p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-white text-2xl font-bold">3</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Get AI Recommendations</h3>
+                <p class="text-gray-600">
+                    Receive AI-powered college recommendations with admission probability and detailed analysis.
+                </p>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-white text-2xl font-bold">4</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Apply & Track</h3>
+                <p class="text-gray-600">
+                    Apply to your chosen colleges, upload documents, and track your application status in real-time.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-20 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold mb-2">150+</div>
+                <div class="text-gray-200">Engineering Colleges</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">10,000+</div>
+                <div class="text-gray-200">Students Helped</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">95%</div>
+                <div class="text-gray-200">Success Rate</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold mb-2">24/7</div>
+                <div class="text-gray-200">AI Support</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">Ready to Find Your Perfect College?</h2>
+        <p class="text-xl text-gray-600 mb-8">
+            Join thousands of students who have successfully found their dream colleges with AdmitAI's AI-powered guidance.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ url_for('signup') }}" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all">
+                <i class="fas fa-rocket mr-2"></i>Start Your Journey
+            </a>
+            <a href="{{ url_for('login') }}" class="border-2 border-blue-500 text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-500 hover:text-white transition-all">
+                <i class="fas fa-sign-in-alt mr-2"></i>Already Have Account?
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">What Students Say</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Hear from students who have successfully used AdmitAI to find their perfect colleges.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Testimonial 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-semibold">R</span>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-800">Rahul Sharma</h4>
+                        <p class="text-gray-600">COEP, Computer Engineering</p>
+                    </div>
+                </div>
+                <p class="text-gray-600">
+                    "AdmitAI helped me get into COEP with its accurate cutoff predictions and personalized recommendations. The AI chatbot answered all my questions instantly!"
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-semibold">P</span>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-800">Priya Patel</h4>
+                        <p class="text-gray-600">VJTI, IT Engineering</p>
+                    </div>
+                </div>
+                <p class="text-gray-600">
+                    "The document management feature saved me so much time! The OCR validation and automated notifications kept me updated throughout the process."
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Testimonial 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-semibold">A</span>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-800">Amit Kumar</h4>
+                        <p class="text-gray-600">PICT, Mechanical Engineering</p>
+                    </div>
+                </div>
+                <p class="text-gray-600">
+                    "The comprehensive database and real-time cutoff data helped me make informed decisions. AdmitAI's AI recommendations were spot on!"
+                </p>
+                <div class="flex text-yellow-400 mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

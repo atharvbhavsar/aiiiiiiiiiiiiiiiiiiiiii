@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block title %}Document Management - AdmitAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Document Management</h1>
+            <p class="text-gray-600">Upload and manage your admission documents</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Upload New Document</h2>
+            <form action="{{ url_for('upload_document') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="doc_name" class="block text-sm font-medium text-gray-700 mb-1">Document Name</label>
+                        <input type="text" id="doc_name" name="doc_name" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="doc_type" class="block text-sm font-medium text-gray-700 mb-1">Document Type</label>
+                        <select id="doc_type" name="doc_type" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Document Type</option>
+                            <option value="10th_marksheet">10th Marksheet</option>
+                            <option value="12th_marksheet">12th Marksheet</option>
+                            <option value="caste_certificate">Caste Certificate</option>
+                            <option value="income_certificate">Income Certificate</option>
+                            <option value="domicile_certificate">Domicile Certificate</option>
+                            <option value="photo_id">Photo ID</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="document" class="block text-sm font-medium text-gray-700 mb-1">Upload File</label>
+                    <input type="file" id="document" name="document" required accept=".pdf,.jpg,.jpeg,.png"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">Accepted formats: PDF, JPG, JPEG, PNG</p>
+                </div>
+                <button type="submit" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Upload Document
+                </button>
+            </form>
+        </div>
+
+        <!-- Documents List -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Your Documents</h2>
+            {% if documents %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for doc in documents %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ doc.doc_name }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        {{ doc.doc_type.replace('_', ' ').title() }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% if doc.status == 'Pending' %}
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    {% elif doc.status == 'Verified' %}
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Verified
+                                        </span>
+                                    {% elif doc.status == 'Rejected' %}
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                            Rejected
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ doc.uploaded_at.strftime('%Y-%m-%d %H:%M') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="viewDocument({{ doc.id }})" class="text-blue-600 hover:text-blue-900 mr-3">
+                                        <i class="fas fa-eye mr-1"></i>View
+                                    </button>
+                                    <button onclick="deleteDocument({{ doc.id }})" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash mr-1"></i>Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-8">
+                    <div class="text-gray-400 mb-4">
+                        <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No documents uploaded</h3>
+                    <p class="text-gray-500">Upload your first document to get started.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Government Verification Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Government Verification</h2>
+            <p class="text-gray-600 mb-4">Verify your documents with government authorities for official recognition.</p>
+            <a href="{{ url_for('government_verification') }}" 
+               class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <i class="fas fa-shield-alt mr-2"></i>
+                Access Government Verification Portal
+            </a>
+        </div>
+
+        <!-- Document Requirements -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Required Documents</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h3 class="font-medium text-gray-900 mb-2">Academic Documents</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 10th Marksheet</li>
+                        <li>• 12th Marksheet</li>
+                        <li>• Transfer Certificate</li>
+                        <li>• Character Certificate</li>
+                    </ul>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h3 class="font-medium text-gray-900 mb-2">Identity & Category Documents</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Aadhar Card</li>
+                        <li>• Caste Certificate (if applicable)</li>
+                        <li>• Income Certificate</li>
+                        <li>• Domicile Certificate</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Document View Modal -->
+<div id="documentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Document Details</h3>
+                <button onclick="closeDocumentModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="space-y-4">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Confirm Deletion</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">Are you sure you want to delete this document? This action cannot be undone.</p>
+            </div>
+            <div class="items-center px-4 py-3 flex space-x-3">
+                <button id="confirmDelete" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300">
+                    Delete
+                </button>
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentDocumentId = null;
+
+function viewDocument(docId) {
+    currentDocumentId = docId;
+    
+    // Show loading
+    document.getElementById('modalTitle').textContent = 'Loading Document...';
+    document.getElementById('modalContent').innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    document.getElementById('documentModal').classList.remove('hidden');
+    
+    // Fetch document details
+    fetch(`/api/document/${docId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displayDocument(data.document);
+            } else {
+                document.getElementById('modalContent').innerHTML = '<p class="text-red-600">Error loading document</p>';
+            }
+        })
+        .catch(error => {
+            document.getElementById('modalContent').innerHTML = '<p class="text-red-600">Error loading document</p>';
+        });
+}
+
+function displayDocument(doc) {
+    document.getElementById('modalTitle').textContent = doc.doc_name;
+    
+    const content = `
+        <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Document Name</label>
+                    <p class="text-sm text-gray-900">${doc.doc_name}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Document Type</label>
+                    <p class="text-sm text-gray-900">${doc.doc_type.replace('_', ' ').toUpperCase()}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        doc.status === 'Verified' ? 'bg-green-100 text-green-800' : 
+                        doc.status === 'Rejected' ? 'bg-red-100 text-red-800' : 
+                        'bg-yellow-100 text-yellow-800'
+                    }">${doc.status}</span>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Uploaded</label>
+                    <p class="text-sm text-gray-900">${doc.uploaded_at}</p>
+                </div>
+            </div>
+            
+            ${doc.ocr_text ? `
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">AI Analysis</label>
+                <div class="bg-gray-50 p-3 rounded-md">
+                    <pre class="text-sm text-gray-700 whitespace-pre-wrap">${doc.ocr_text}</pre>
+                </div>
+            </div>
+            ` : ''}
+            
+            <div class="flex space-x-3">
+                <a href="/uploads/${doc.file_path.split('/').pop()}" target="_blank" 
+                   class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    <i class="fas fa-download mr-2"></i>Download
+                </a>
+                <button onclick="deleteDocument(${doc.id})" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                    <i class="fas fa-trash mr-2"></i>Delete
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modalContent').innerHTML = content;
+}
+
+function deleteDocument(docId) {
+    currentDocumentId = docId;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function confirmDelete() {
+    if (!currentDocumentId) return;
+    
+    fetch(`/api/document/${currentDocumentId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Error deleting document');
+        }
+    })
+    .catch(error => {
+        alert('Error deleting document');
+    });
+    
+    closeDeleteModal();
+}
+
+function closeDocumentModal() {
+    document.getElementById('documentModal').classList.add('hidden');
+    currentDocumentId = null;
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    currentDocumentId = null;
+}
+
+// Event listeners
+document.getElementById('confirmDelete').addEventListener('click', confirmDelete);
+
+// Close modals when clicking outside
+document.getElementById('documentModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDocumentModal();
+    }
+});
+
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDeleteModal();
+    }
+});
+</script>
+{% endblock %} 

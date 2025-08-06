@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Important Dates - AdmitAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Important Dates</h1>
+            <p class="text-gray-600">Stay updated with all admission-related deadlines</p>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-red-900 mb-4">⚠️ Upcoming Deadlines</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for date in dates[:6] %}
+                {% if date.priority == 'High' %}
+                <div class="bg-white rounded-lg p-4 border-l-4 border-red-500">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-red-600">{{ date.exam_name }}</span>
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">High Priority</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-1">{{ date.event_name }}</h3>
+                    <p class="text-sm text-gray-600 mb-2">{{ date.description }}</p>
+                    <div class="text-lg font-bold text-red-600">{{ date.date }}</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- All Important Dates -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">All Important Dates</h2>
+            <div class="space-y-4">
+                {% for date in dates %}
+                <div class="border border-gray-200 rounded-lg p-4 {% if date.priority == 'High' %}border-l-4 border-red-500{% elif date.priority == 'Medium' %}border-l-4 border-yellow-500{% else %}border-l-4 border-blue-500{% endif %}">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <span class="text-sm font-medium text-gray-600">{{ date.exam_name }}</span>
+                                <span class="ml-2 text-xs px-2 py-1 rounded-full {% if date.priority == 'High' %}bg-red-100 text-red-800{% elif date.priority == 'Medium' %}bg-yellow-100 text-yellow-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                                    {{ date.priority }} Priority
+                                </span>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-1">{{ date.event_name }}</h3>
+                            <p class="text-sm text-gray-600 mb-2">{{ date.description }}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-gray-900">{{ date.date }}</div>
+                            <button onclick="setReminder('{{ date.event_name }}', '{{ date.date }}')" 
+                                    class="text-sm text-blue-600 hover:text-blue-800 mt-1">
+                                Set Reminder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Exam-wise Timeline -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Exam-wise Timeline</h2>
+            <div class="space-y-6">
+                <!-- JEE Main Timeline -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">JEE Main 2025</h3>
+                    <div class="relative">
+                        <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">1</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Application Form Release</div>
+                                    <div class="text-sm text-gray-600">December 2024</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">2</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Application Deadline</div>
+                                    <div class="text-sm text-gray-600">January 2025</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">3</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Exam Date</div>
+                                    <div class="text-sm text-gray-600">January, April, May 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MHT CET Timeline -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">MHT CET 2025</h3>
+                    <div class="relative">
+                        <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">1</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Application Form Release</div>
+                                    <div class="text-sm text-gray-600">February 2025</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">2</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Application Deadline</div>
+                                    <div class="text-sm text-gray-600">March 2025</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-sm font-medium z-10 relative">3</div>
+                                <div class="ml-4">
+                                    <div class="font-medium text-gray-900">Exam Date</div>
+                                    <div class="text-sm text-gray-600">May 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="bg-blue-50 rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-blue-900 mb-4">💡 Tips to Stay Organized</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-medium text-blue-900 mb-2">Before Deadlines</h3>
+                    <ul class="text-blue-800 space-y-2">
+                        <li>• Set multiple reminders (1 week, 3 days, 1 day before)</li>
+                        <li>• Keep all documents ready in advance</li>
+                        <li>• Double-check application requirements</li>
+                        <li>• Have backup payment methods ready</li>
+                        <li>• Test your internet connection</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-blue-900 mb-2">During Application</h3>
+                    <ul class="text-blue-800 space-y-2">
+                        <li>• Start early to avoid last-minute rush</li>
+                        <li>• Save your progress frequently</li>
+                        <li>• Take screenshots of confirmation</li>
+                        <li>• Keep application numbers handy</li>
+                        <li>• Follow up if you don't receive confirmation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function setReminder(event, date) {
+    // This would integrate with a reminder system
+    alert(`Reminder set for ${event} on ${date}`);
+}
+</script>
+{% endblock %} 

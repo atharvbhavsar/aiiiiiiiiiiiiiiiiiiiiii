@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AdmitAI{% endblock %}
+
+{% block content %}
+<!-- Welcome Section -->
+<div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-8 mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold mb-2">Welcome back, {{ current_user.name }}! 👋</h1>
+            <p class="text-blue-100">Ready to continue your college admission journey? Let's find your perfect college.</p>
+        </div>
+        <div class="hidden md:block">
+            <i class="fas fa-graduation-cap text-6xl text-blue-200"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-bookmark text-white"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-600">Saved Colleges</p>
+                <p class="text-2xl font-bold text-gray-800">{{ saved_count }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-alt text-white"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-600">Pending Documents</p>
+                <p class="text-2xl font-bold text-gray-800">{{ pending_docs }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-bell text-white"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-600">Notifications</p>
+                <p class="text-2xl font-bold text-gray-800">{{ notifications|length }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+        <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-white"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-600">Days Left</p>
+                <p class="text-2xl font-bold text-gray-800">45</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Features Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Find Courses -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-search text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Find Courses</h3>
+        <p class="text-gray-600 mb-4">Explore engineering courses and colleges based on your preferences and scores.</p>
+        <a href="{{ url_for('find_courses') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium">
+            Explore Courses
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Check Eligibility -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-check-circle text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Check Eligibility</h3>
+        <p class="text-gray-600 mb-4">Get AI-powered recommendations for colleges based on your scores and category.</p>
+        <a href="{{ url_for('check_eligibility') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
+            Check Now
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Important Dates -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-calendar text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Important Dates</h3>
+        <p class="text-gray-600 mb-4">Stay updated with all important deadlines, exam dates, and application timelines.</p>
+        <a href="{{ url_for('important_dates') }}" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium">
+            View Dates
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Fees & Scholarships -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-rupee-sign text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Fees & Scholarships</h3>
+        <p class="text-gray-600 mb-4">Explore fee structures, scholarship opportunities, and financial aid options.</p>
+        <a href="{{ url_for('fees_scholarships') }}" class="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium">
+            Explore Options
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Document Submission -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-file-upload text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Document Submission</h3>
+        <p class="text-gray-600 mb-4">Upload and verify your documents with AI-powered OCR validation.</p>
+        <a href="{{ url_for('documents') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium">
+            Upload Documents
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+    
+    <!-- Option Form Assistant -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 card-hover">
+        <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-green-600 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-clipboard-list text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Option Form Assistant</h3>
+        <p class="text-gray-600 mb-4">Get AI assistance to fill your option form with optimal college preferences.</p>
+        <a href="{{ url_for('option_form') }}" class="inline-flex items-center text-teal-600 hover:text-teal-700 font-medium">
+            Get Started
+            <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+    </div>
+</div>
+
+<!-- Recent Notifications -->
+{% if notifications %}
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-800">Recent Notifications</h2>
+        <a href="#" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</a>
+    </div>
+    
+    <div class="space-y-4">
+        {% for notification in notifications %}
+        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-bell text-white text-sm"></i>
+            </div>
+            <div class="flex-1">
+                <h4 class="font-medium text-gray-800">{{ notification.title }}</h4>
+                <p class="text-sm text-gray-600">{{ notification.message }}</p>
+                <p class="text-xs text-gray-500 mt-1">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- AI Chatbot Quick Access -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-6">
+        <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-robot text-white text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-xl font-semibold">AI Assistant</h3>
+                <p class="text-blue-100">Get instant help with your questions</p>
+            </div>
+        </div>
+        <button id="quick-chat-btn" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+            <i class="fas fa-comments mr-2"></i>Start Chat
+        </button>
+    </div>
+    
+    <!-- Saved Colleges Quick Access -->
+    <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-xl p-6">
+        <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <i class="fas fa-bookmark text-white text-xl"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-xl font-semibold">Saved Colleges</h3>
+                <p class="text-green-100">View your favorite colleges</p>
+            </div>
+        </div>
+        <a href="{{ url_for('saved_colleges') }}" class="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors inline-block">
+            <i class="fas fa-eye mr-2"></i>View Saved
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mt-8">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+    
+    <div class="space-y-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-check text-green-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-gray-800">Account created successfully</p>
+                <p class="text-xs text-gray-500">2 days ago</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-search text-blue-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-gray-800">Explored MHT-CET colleges</p>
+                <p class="text-xs text-gray-500">1 day ago</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-bookmark text-purple-600 text-sm"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-gray-800">Saved COEP to favorites</p>
+                <p class="text-xs text-gray-500">1 day ago</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Quick chat button functionality
+    document.getElementById('quick-chat-btn').addEventListener('click', function() {
+        // Trigger chatbot
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        if (chatbotBtn) {
+            chatbotBtn.click();
+        }
+    });
+    
+    // Auto-refresh notifications
+    setInterval(function() {
+        fetch('/api/notifications')
+            .then(response => response.json())
+            .then(data => {
+                // Update notification count and list
+                console.log('Notifications updated:', data);
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+    }, 30000); // Refresh every 30 seconds
+</script>
+{% endblock %} 

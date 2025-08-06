@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}MongoDB College Data{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">MongoDB College Data</h1>
+        <p class="text-gray-600">Real-time college cutoff data from MongoDB database</p>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">Search & Filter</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">College Name</label>
+                <input type="text" id="collegeSearch" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Search colleges...">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
+                <select id="courseFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Courses</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Computer Engineering">Computer Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select id="categoryFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Categories</option>
+                    <option value="GOPENS">GOPENS</option>
+                    <option value="GSCS">GSCS</option>
+                    <option value="GOBCS">GOBCS</option>
+                    <option value="LOPENS">LOPENS</option>
+                    <option value="TFWS">TFWS</option>
+                    <option value="EWS">EWS</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button onclick="searchColleges()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Search
+            </button>
+            <button onclick="loadAllColleges()" class="ml-2 bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                Show All
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="hidden text-center py-8">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <p class="mt-2 text-gray-600">Loading college data...</p>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" class="space-y-6">
+        <!-- College cards will be populated here -->
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="hidden text-center py-8">
+        <div class="text-gray-500">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No colleges found</h3>
+            <p class="mt-1 text-sm text-gray-500">Try adjusting your search criteria.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+let allColleges = [];
+
+// Load all colleges on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadAllColleges();
+});
+
+function showLoading() {
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('noResults').classList.add('hidden');
+}
+
+function hideLoading() {
+    document.getElementById('loading').classList.add('hidden');
+}
+
+function loadAllColleges() {
+    showLoading();
+    
+    fetch('/api/mongodb-colleges')
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                allColleges = data.colleges;
+                displayColleges(allColleges);
+            } else {
+                showError('Failed to load colleges');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showError('Error loading colleges: ' + error.message);
+        });
+}
+
+function searchColleges() {
+    const collegeName = document.getElementById('collegeSearch').value;
+    const courseName = document.getElementById('courseFilter').value;
+    const category = document.getElementById('categoryFilter').value;
+    
+    showLoading();
+    
+    // If no filters are applied, show all colleges
+    if (!collegeName && !courseName && !category) {
+        loadAllColleges();
+        return;
+    }
+    
+    let url = '/api/mongodb-colleges?';
+    if (collegeName) url += `college_name=${encodeURIComponent(collegeName)}&`;
+    if (courseName) url += `course_name=${encodeURIComponent(courseName)}&`;
+    if (category) url += `category=${encodeURIComponent(category)}&`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                displayColleges(data.colleges);
+            } else {
+                showError('Failed to search colleges');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showError('Error searching colleges: ' + error.message);
+        });
+}
+
+function displayColleges(colleges) {
+    const resultsDiv = document.getElementById('results');
+    
+    if (colleges.length === 0) {
+        document.getElementById('noResults').classList.remove('hidden');
+        return;
+    }
+    
+    document.getElementById('noResults').classList.add('hidden');
+    
+    const collegesHtml = colleges.map(college => {
+        const coursesHtml = college.courses.map(course => {
+            const seatTypesHtml = Object.entries(course.seatTypes).map(([level, categories]) => {
+                const categoriesHtml = Object.entries(categories).map(([cat, data]) => {
+                    return `
+                        <div class="bg-gray-50 p-3 rounded-md">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium text-sm">${cat}</span>
+                                <div class="text-right">
+                                    <div class="text-xs text-gray-600">Merit No: ${data.meritNo}</div>
+                                    <div class="text-xs text-gray-600">Percentile: ${data.meritPercentile}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-sm text-gray-700 mb-2">${level}</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                            ${categoriesHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <div class="bg-white rounded-lg shadow-md p-6 mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">${course.courseName}</h3>
+                    <div class="text-sm text-gray-600 mb-4">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">${course.courseCode}</span>
+                    </div>
+                    ${seatTypesHtml}
+                </div>
+            `;
+        }).join('');
+        
+        return `
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">${college.collegeName}</h2>
+                        <p class="text-gray-600 text-sm">Code: ${college.collegeCode}</p>
+                        <p class="text-gray-600 text-sm">Status: ${college.status}</p>
+                        <p class="text-gray-600 text-sm">University: ${college.homeUniversity}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                            ${college.courses.length} Course${college.courses.length > 1 ? 's' : ''}
+                        </span>
+                    </div>
+                </div>
+                <div class="border-t pt-4">
+                    ${coursesHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    resultsDiv.innerHTML = collegesHtml;
+}
+
+function displayCutoffs(cutoffs) {
+    const resultsDiv = document.getElementById('results');
+    
+    if (cutoffs.length === 0) {
+        document.getElementById('noResults').classList.remove('hidden');
+        return;
+    }
+    
+    document.getElementById('noResults').classList.add('hidden');
+    
+    // Group cutoffs by college
+    const groupedCutoffs = {};
+    cutoffs.forEach(cutoff => {
+        if (!groupedCutoffs[cutoff.collegeName]) {
+            groupedCutoffs[cutoff.collegeName] = [];
+        }
+        groupedCutoffs[cutoff.collegeName].push(cutoff);
+    });
+    
+    const cutoffsHtml = Object.entries(groupedCutoffs).map(([collegeName, collegeCutoffs]) => {
+        const cutoffsHtml = collegeCutoffs.map(cutoff => {
+            return `
+                <div class="bg-white rounded-lg shadow-md p-4 mb-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">${cutoff.courseName}</h4>
+                            <p class="text-sm text-gray-600">Category: ${cutoff.category}</p>
+                            <p class="text-sm text-gray-600">Level: ${cutoff.level}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-blue-600">${cutoff.meritPercentile}%</div>
+                            <div class="text-sm text-gray-600">Merit No: ${cutoff.meritNo}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        return `
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">${collegeName}</h3>
+                <div class="space-y-3">
+                    ${cutoffsHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    resultsDiv.innerHTML = cutoffsHtml;
+}
+
+function showError(message) {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">Error</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                        <p>${message}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+</script>
+{% endblock %}
